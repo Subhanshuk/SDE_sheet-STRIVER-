@@ -1,0 +1,41 @@
+------------------------------------------------------------------------BETTER SOLUTION---------------------------------------------------------------------------------
+int longestConsecutive(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        if(nums.size()==0) return 0;
+        int count=0,longest=1,lastSmall=INT_MIN;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]-1 == lastSmall){
+                count++;
+                lastSmall=nums[i];
+            }
+            else if(nums[i]!=lastSmall){
+                count=1;
+                lastSmall=nums[i];
+            }
+            longest=max(longest,count);
+        }
+        return longest;
+    }
+
+-------------------------------------------------------------------------OPTIMAL SOLUTION------------------------------------------------------------------------------
+ int longestConsecutive(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0) return 0;
+        int longest=1;
+        unordered_set<int> st(nums.begin(),nums.end());
+
+        for(auto it:st){
+            if(st.find(it-1)==st.end()){
+                int count=1;
+                int ele=it;
+                while(st.find(ele+1)!=st.end()){
+                    count++;
+                    ele++;
+                }
+                longest=max(longest,count);
+            }
+        }
+        return longest;
+    }
+
+
