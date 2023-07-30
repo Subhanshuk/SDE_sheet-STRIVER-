@@ -1,0 +1,60 @@
+---------------------------------------------------------------------------NAIVE APPROACH-------------------------------------------------------------------------------
+
+Node *flatten(Node *root)
+{
+   // Your code here
+   vector<int> temp;
+   Node* curr=root;
+   while(curr!=NULL){
+       Node* curr2=curr;
+       while(curr2!=NULL){
+           temp.push_back(curr2->data);
+           curr2=curr2->bottom;
+       }
+       curr=curr->next;
+   }
+   sort(temp.begin(),temp.end());
+   //for(int i=0;i<temp.size();i++)cout<<temp[i]<<" ";
+   Node* dummy=new Node(0);
+   Node* c=dummy;
+   for(int i=0;i<temp.size();i++){
+       c->bottom=new Node(temp[i]);
+       c=c->bottom;
+   }
+   return dummy->bottom;
+}
+
+---------------------------------------------------------------------------------OPTIMAL APPROACH-------------------------------------------------------------------
+
+Node* mergeTwoList(Node* l1,Node* l2){
+    Node* dummy=new Node(0);
+    Node* curr=dummy;
+    
+    while(l1!=NULL && l2!=NULL){
+        if(l1->data < l2->data){
+            curr->bottom=l1;
+            l1=l1->bottom;
+            curr=curr->bottom;
+        }
+        else{
+            curr->bottom=l2;
+            l2=l2->bottom;
+            curr=curr->bottom;
+        }
+    }
+    if(l1) curr->bottom=l1;
+    else curr->bottom=l2;
+    
+    return dummy->bottom;
+}
+Node *flatten(Node *root)
+{
+     if(root==NULL || root->next==NULL) return root;
+     
+     root->next=flatten(root->next);
+     
+     root=mergeTwoList(root,root->next);
+     
+     return root;
+}
+
