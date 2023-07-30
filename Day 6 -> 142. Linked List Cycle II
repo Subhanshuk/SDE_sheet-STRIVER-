@@ -1,0 +1,32 @@
+------------------------------------------------------------------------NAIVE APPROACH----------------------------------------------------------------------------------
+ ListNode *detectCycle(ListNode *head) {
+        unordered_set<ListNode*> st;
+        ListNode* curr=head;
+        while(curr!=NULL){
+            if(st.find(curr)!=st.end()) return curr;
+            st.insert(curr);
+            curr=curr->next;
+        }
+        return NULL;
+    }
+
+-----------------------------------------------------------------------OPTIMAL APROACH---------------------------------------------------------------------------------
+ListNode *detectCycle(ListNode *head) {
+        if(head==NULL || head->next==NULL) return NULL;
+
+        ListNode *slow=head,*fast=head,*entry=head;
+        while(fast->next!=NULL && fast->next->next!=NULL){
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast){
+                while(entry!=slow){
+                    slow=slow->next;
+                    entry=entry->next;
+                }
+                return slow;
+            }
+        }
+        return NULL;
+    }
+
+
