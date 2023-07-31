@@ -1,0 +1,44 @@
+-----------------------------------------------------------------------NAIVE APPROACH-----------------------------------------------------------------------------------
+
+ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL || head->next==NULL || k==0) return head;
+        int n=1;
+        ListNode* curr=head;
+        while(curr->next!=NULL){
+            n++;
+            curr=curr->next;
+        }
+        k=k%n;
+        if(k==0) return head;
+        ListNode* dummy=new ListNode(0);
+        ListNode* temp=dummy;
+        ListNode* curr1=head;
+        for(int i=1;i<n-k+1;i++){
+            temp->next=new ListNode(curr1->val);
+            curr1=curr1->next;
+            temp=temp->next;
+        }
+        curr->next=dummy->next;
+        return curr1;
+    }
+
+
+---------------------------------------------------------------------------OPTIMAL APPROACH----------------------------------------------------------------------------
+ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL || head->next==NULL || k==0) return head;
+        int n=1;
+        ListNode* curr=head;
+        while(curr->next!=NULL){
+            n++;
+            curr=curr->next;
+        }
+        curr->next=head;
+        k=k%n;
+        for(int i=0;i<n-k;i++){
+            curr=curr->next;
+        }
+        head=curr->next;
+        curr->next=NULL;
+        return head;
+    }
+
