@@ -1,0 +1,28 @@
+vector<vector<int>> ans;
+    void subSet(int ind,vector<int> &candi,int target,vector<int> &temp){
+        if(target==0){
+            ans.push_back(temp);
+            return;
+        }
+        if(target < 0){
+            return;
+        }
+        if(ind == candi.size()){
+            return;
+        }
+
+        subSet(ind+1,candi,target,temp);
+
+        temp.push_back(candi[ind]);
+        subSet(ind,candi,target-candi[ind],temp);
+        temp.pop_back();
+
+        
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        ans.clear();
+        vector<int> temp;
+        subSet(0,candidates,target,temp);
+        return ans;
+    }
+
