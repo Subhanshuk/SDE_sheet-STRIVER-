@@ -1,0 +1,65 @@
+---------------------------------------------------------------------------BRUTE FORCE----------------------------------------------------------------------------------
+
+void subSet(int ind,int target,vector<int> &candi,vector<int> &temp,set<vector<int>> &st){
+        if(target==0){
+            sort(temp.begin(),temp.end());
+            st.insert(temp);
+            return;
+        }
+        if(target < 0){
+            return;
+        }
+        if(ind == candi.size()){
+            return;
+        }
+
+        subSet(ind+1,target,candi,temp,st);
+
+        temp.push_back(candi[ind]);
+        subSet(ind+1,target-candi[ind],candi,temp,st);
+        temp.pop_back();
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        set<vector<int>> st;
+
+        vector<int> temp;
+
+        sort(candidates.begin(),candidates.end());
+
+        subSet(0,target,candidates,temp,st);
+
+        vector<vector<int>> ans;
+        for(auto it:st){
+            ans.push_back(it);
+        }
+        return ans;
+    }
+
+
+---------------------------------------------------------------------------------OPTIMAL SOLUTION-------------------------------------------------------------------
+
+void subSet(int ind,int target,vector<int> &candi,vector<int> &temp,vector<vector<int>> &ans){
+        if(target==0){
+            ans.push_back(temp);
+            return;
+        }
+
+        for(int i=ind;i<candi.size();i++){
+            if(i>ind && candi[i]==candi[i-1]) continue;
+            if(candi[i] > target) break;
+
+            temp.push_back(candi[i]);
+            subSet(i+1,target-candi[i],candi,temp,ans);
+            temp.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> temp;
+        sort(candidates.begin(),candidates.end());
+
+        subSet(0,target,candidates,temp,ans);
+
+        return ans;
+    }
+
