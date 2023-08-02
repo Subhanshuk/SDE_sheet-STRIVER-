@@ -1,0 +1,28 @@
+void subSet(int ind,vector<int> &nums,int n,vector<int>&temp,set<vector<int>> &st){
+       
+        if(ind == n){
+           sort(temp.begin(),temp.end());
+           st.insert(temp);
+           return;
+        }
+        
+        temp.push_back(nums[ind]);
+        subSet(ind+1,nums,n,temp,st);
+        temp.pop_back();
+
+        subSet(ind+1,nums,n,temp,st);
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        int n=nums.size();
+        sort(nums.begin(),nums.end());
+        set<vector<int>> st;
+        vector<vector<int>> ans;
+        vector<int> temp;
+        subSet(0,nums,n,temp,st);
+        for(auto it:st){
+            ans.push_back(it);
+        }
+        return ans;
+    }
+
+
