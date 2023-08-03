@@ -1,0 +1,93 @@
+-----------------------------------------------------------------------Naive Approach-----------------------------------------------------------------------------------
+
+  bool isSafe(int row,int col,vector<string> &board,int n){
+        int dupr=row;
+        int dupc=col;
+        //upperDiagonal
+        while(row>=0 && col>=0){
+            if(board[row][col]=='Q') return false;
+            row--;
+            col--;
+        }
+        row=dupr;
+        col=dupc;
+        //leftRow
+        while(col>=0){
+            if(board[row][col]=='Q') return false;
+            col--;
+        }
+        row=dupr;
+        col=dupc;
+        //lowerDiagonal
+        while(row<n && col>=0){
+            if(board[row][col]=='Q') return false;
+            row++;
+            col--;
+        }
+        return true;
+    }
+    void solve(int col,vector<string> &board,vector<vector<string>> &ans,int n){
+        if(col==n){
+            ans.push_back(board);
+            return;
+        }
+
+        for(int row=0;row<n; row++){
+            if(isSafe(row,col,board,n)){
+                board[row][col]='Q';
+                solve(col+1,board,ans,n);
+                board[row][col]='.';
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+      vector<vector<string>> ans;
+      vector<string> board(n);
+      string s(n,'.');
+      for(int i=0;i<n;i++){
+          board[i]=s;
+      }  
+      solve(0,board,ans,n);
+      return ans;
+    }
+
+
+---------------------------------------------------------------------------OPTIMAL SOLUTION-------------------------------------------------------------------------
+
+
+
+  void solve(int col,vector<string> &board,vector<vector<string>> &ans,int n,vector<int> &leftrow,vector<int> &upDia,vector<int> &lowDia){
+        if(col==n){
+            ans.push_back(board);
+            return;
+        }
+
+        for(int row=0;row<n;row++){
+            if(leftrow[row]==0 && lowDia[row+col]==0 && upDia[n-1 + col-row]==0){
+                board[row][col]='Q';
+                leftrow[row]=1;
+                lowDia[row+col]=1;
+                upDia[n-1 + col-row]=1;
+                solve(col+1,board,ans,n,leftrow,upDia,lowDia);
+                board[row][col]='.';
+                leftrow[row]=0;
+                lowDia[row+col]=0;
+                upDia[n-1 + col-row]=0;
+            }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+      vector<vector<string>> ans;
+      vector<string> board(n);
+      string s(n,'.');
+      for(int i=0;i<n;i++){
+          board[i]=s;
+      }
+      vector<int> leftrow(n,0);
+      vector<int> upDia(2*n-1,0);
+      vector<int> lowDia(2*n-1,0);
+      solve(0,board,ans,n,leftrow,upDia,lowDia);
+      return ans;
+    }
+
+
